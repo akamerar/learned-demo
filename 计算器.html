@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>计算器</title>
+	<link rel="stylesheet" href="reset.css">
+	<style>
+		#box{
+			width: 330px;
+			height: 440px;
+			background-color: #ccc;
+			position: relative;
+			left: 50%;
+			top: 0%;
+			margin-top: 150px;
+			margin-left: -165px;
+			border: 1px solid #666;
+			border-radius: 5px;
+			overflow: hidden;
+			transition: all 0.2s;
+		}
+		#box:hover{
+			transform: scale(1.05, 1.05);
+			box-shadow: 0 10px 10px #666;
+		}
+		p{
+			position: absolute;
+			font-size: 25px;
+			font-weight: bold;
+			top: 85px;
+			left: 30px;
+		}
+		#head{
+			width: 300px;
+			height: 50px;
+			border: 1px solid #666;
+			position: absolute;
+			left: 15px;
+			top: 15px;
+			font-size: 30px;
+			font-weight: bold;
+			font-family: "Macrosoft yahei";
+			line-height: 50px;
+			text-align: right;
+			background-color: #eee;
+			border-radius: 5px;
+			text-overflow: hidden;
+			overflow: hidden;
+		}
+		#del{
+			width: 80px;
+			height: 30px;
+			position: absolute;
+			right: 20px;
+			top: 85px;
+			border: 1px solid #666;
+			box-shadow: 0 2px 2px #666;
+			background-color: #eee;
+			border-radius: 5px;
+			font-size: 20px;
+			font-weight: bold;
+			text-align: center;
+			line-height: 30px;
+			cursor: pointer;
+		}
+		#del:hover{
+			background-color: #ccc;
+		}
+		.btn-group{
+			height: 300px;
+			margin-top: 130px;
+			display: flex;
+			justify-content: space-around;
+			flex-wrap: wrap;
+		}
+		.btn-group li{
+			width: 50px;
+			height: 50px;
+			border: 1px solid #666;
+			box-shadow: 0 2px 2px #666;
+			margin: 10px;
+			text-align: center;
+			line-height: 50px;
+			background-color: #eee;
+			border-radius: 5px;
+			font-size: 20px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+		.btn-group li:hover{
+			background-color: #ccc;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<p>杨桐的计算器</p>
+		<div id="head"></div>
+		<div id="del">c</div>
+		<ul class="btn-group">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>+</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>-</li>
+			<li>7</li>
+			<li>8</li>
+			<li>9</li>
+			<li>*</li>
+			<li>0</li>
+			<li>.</li>
+			<li>=</li>
+			<li>/</li>
+		</ul>
+	</div>
+	<script>
+		var oBtn = document.getElementsByTagName('li');
+		var oHead = document.getElementById('head');
+		var oDel = document.getElementById('del');
+		for(var i = 0; i< 16;i ++){
+			oBtn[i].fh = i;
+			oBtn[i].onclick = function () {
+				if(this.fh == 14){
+					oHead.innerHTML = eval(oHead.innerHTML);
+				}else{
+					oHead.innerHTML += this.innerHTML;	
+				}		
+			}
+		}
+		oDel.onclick = function () {
+			oHead.innerHTML = '';
+			_value1 = 0;
+			_value2 = 0;
+			value = '';
+			oHead.fh = '';
+		}
+	</script>
+</body>
+</html>

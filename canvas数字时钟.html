@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+	<title>canvas数字时钟</title>
+	<link rel="stylesheet" href="reset.css">
+	<style>
+		#can{
+			background: #222;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="can">您的浏览器不支持canvas</canvas>
+	<script>
+		//requestAnimationFreame兼容
+		(function() {
+		    var lastTime = 0;
+		    var vendors = ['webkit', 'moz'];
+		    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+		        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+		        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] ||    // Webkit中此取消方法的名字变了
+		                                      window[vendors[x] + 'CancelRequestAnimationFrame'];
+		    }
+
+		    if (!window.requestAnimationFrame) {
+		        window.requestAnimationFrame = function(callback, element) {
+		            var currTime = new Date().getTime();
+		            var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+		            var id = window.setTimeout(function() {
+		                callback(currTime + timeToCall);
+		            }, timeToCall);
+		            lastTime = currTime + timeToCall;
+		            return id;
+		        };
+		    }
+		    if (!window.cancelAnimationFrame) {
+		        window.cancelAnimationFrame = function(id) {
+		            clearTimeout(id);
+		        };
+		    }
+		}());
+
+		//初始化画板
+		var can = document.getElementById('can');
+		var cxt = can.getContext('2d');
+		var htmlw = can.width = window.innerWidth;
+		var htmlh = can.height = window.innerHeight;
+		window.onresize = function(){
+			htmlw = can.width = window.innerWidth;
+			htmlh = can.height = window.innerHeight;
+		}
+
+		//创建小球对象
+		function CreateBall(x,y){
+			this.x=x;
+			this.y=y;
+		};
+		CreateBall.prototype = {
+			//初始化小球参数
+			Init:function(){
+				this.raduis = 10,
+				this.r = parseInt(Math.random()*255);
+				this.g = parseInt(Math.random()*255);
+				this.b = parseInt(Math.random()*255);
+				this.a = 1;
+			},
+			//画小球对象
+			Draw:function(){
+				cxt.fillStyle = 'rgba('+this.r+','+this.g+','+this.b+','+this.a+')';
+				//cxt.fillStyle = '#f60';
+				cxt.arc(this.x,this.y,this.raduis,0,Math.PI*2,false);
+				cxt.fill();
+			},
+			Boom:function( ){
+				var This = this;
+				this.dropBallArr = [];
+				//下落小球对象
+				function DropBall(){};
+				DropBall.prototype = {
+					Init:function(){
+						this.count = 0;
+						this.array = [1,-1,0,2,-2,3,-3,4,-4,5,-5];
+						this.raduis = 10;
+						this.x = This.x,
+						this.y = This.y,
+						this.r = parseInt(Math.random()*255);
+						this.g = parseInt(Math.random()*255);
+						this.b = parseInt(Math.random()*255);
+						this.a = 1;
+						//水平速度
+						this.vh = this.array[Math.round(Math.random()*(this.array.length-1))];
+						//竖直速度
+						this.vv = -parseInt(Math.random()*10+2);
+					},
+					drawDrop:function(){
+						cxt.beginPath();
+						cxt.fillStyle = 'rgba('+this.r+','+this.g+','+this.b+','+this.a+')';
+						cxt.arc(this.x,this.y,this.raduis,0,Math.PI*2,false);
+						cxt.fill();
+						this.update();
+					},
+					update:function(){
+						this.x += this.vh;
+						this.y += this.vv;
+						this.vv += 1;//加速度设置为1 每秒速度向下减少1
+						if(this.y+this.raduis>900){
+							this.vv = -Math.abs(this.vv)*0.7;
+							this.count++;
+						}
+						if(this.count>3){
+							this.a *=0.9;
+						}
+					}
+				}
+				//创建四个下落的球  改为2个
+				for(var i=0;i<1;i++){//改为2个
+					var dropBall = new DropBall();
+					dropBall.Init();
+					this.dropBallArr[i] = dropBall;
+				}
+				//console.log(this.dropBallArr)
+				drawDropBegin();
+				function drawDropBegin(){
+					/*cxt.fillStyle = "rgba(0,0,0,1)";
+					cxt.fillRect(0,0,can.width,can.height);*/
+					cxt.beginPath();
+					//cxt.fillStyle = 'rgba('+This.r+','+This.g+','+This.b+','+This.a+')';
+					//cxt.arc(This.x,This.y,This.raduis,0,Math.PI*2,false);
+					//console.log(this.x+''+this.y)
+					cxt.fill();
+					for(var i=0;i<1;i++){//改为2个
+						//console.log(This.dropBallArr[i]);
+						This.dropBallArr[i].drawDrop();
+						var endId = requestAnimationFrame(drawDropBegin);
+					}
+					if(This.dropBallArr[0].a<0.1){
+						cancelAnimationFrame(endId);
+					}
+				}
+			}
+		}
+		//创建数字对象
+		function Number(x,y,num){
+			this.x = x;
+			this.y = y;
+			this.num = num;
+		};
+		Number.prototype = {
+			Init:function(){
+				this.ballArr = [];
+				if(this.num==1){
+					var ball = new CreateBall(this.x+60,this.y+20);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+50);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==2){
+					var ball = new CreateBall(this.x+40,this.y+20);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+90,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+50);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+90,this.y+15);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+70,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+55,this.y+13);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==3){
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==4){
+					var ball = new CreateBall(this.x+60,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+120,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+50);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+50,this.y+75);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+60);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+70,this.y+45);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==5){
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+50);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+95,this.y+75);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+105,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+105,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+95,this.y+125);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==6){
+					var ball = new CreateBall(this.x+40,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+50,this.y+125);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+65,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+85,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+125);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+110,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+110,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+75);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+85,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+85,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+65,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+50,this.y+75);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+65);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+45);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+40,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+55,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+70,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+90,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+105,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==7){
+					var ball = new CreateBall(this.x+40,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+30);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+70,this.y+110);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+90);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+90,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+50);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==8){
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==9){
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+				if(this.num==0){
+					var ball = new CreateBall(this.x+60,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+130);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+115);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+100,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+80,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+60,this.y+10);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+25);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+100);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+85);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+55);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+40);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+45,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+					var ball = new CreateBall(this.x+115,this.y+70);
+					ball.Init();
+					ball.Draw();
+					ball.Boom();
+					this.ballArr.push(ball);
+				}
+			},
+		}
+		var newTime = new Date();
+		var hour = newTime.getHours();
+		var min = newTime.getMinutes();
+		var sec = newTime.getSeconds();
+		var numArr = [];
+		var num1 = new Number(300,300,hour<10?0:parseInt(hour/10));
+		num1.Init();
+		numArr.push(num1);
+		var num2 = new Number(400,300,hour%10);
+		num2.Init();
+		numArr.push(num2);
+		var num3 = new Number(550,300,min<10?0:parseInt(min/10));
+		num3.Init();
+		numArr.push(num3);
+		var num4 = new Number(650,300,min%10);
+		num4.Init();
+		numArr.push(num4);
+		var num5 = new Number(800,300,sec<10?0:parseInt(sec/10));
+		num5.Init();
+		numArr.push(num5);
+		var num6 = new Number(900,300,sec%10);
+		num6.Init();
+		numArr.push(num6);
+
+		setInterval(function(){
+			newTime = new Date();
+			if(hour != newTime.getHours()){
+				if((hour<10?0:parseInt(hour/10))!=(newTime.getHours()<10?0:parseInt(newTime.getHours()/10))){
+					numArr[0] = new Number(300,300,newTime.getHours()<10?0:parseInt(newTime.getHours()/10));
+					numArr[0].Init();
+				}
+				if(hour%10!=newTime.getHours()()%10){
+					numArr[1] = new Number(400,300,newTime.getHours()()%10);
+					numArr[1].Init();
+				}
+				hour = newTime.getHours();
+			}
+			if(min != newTime.getMinutes()){
+				if((min<10?0:parseInt(min/10))!=(newTime.getMinutes()<10?0:parseInt(newTime.getMinutes()/10))){
+					numArr[2] = new Number(550,300,newTime.getMinutes()<10?0:parseInt(newTime.getMinutes()/10));
+					numArr[2].Init();
+				}
+				if(min%10!=newTime.getMinutes()%10){
+					numArr[3] = new Number(650,300,newTime.getMinutes()%10);
+					numArr[3].Init();
+				}
+				min = newTime.getMinutes();
+			}
+			if(sec!= newTime.getSeconds()){
+				if((sec<10?0:parseInt(sec/10))!=(newTime.getSeconds()<10?0:parseInt(newTime.getSeconds()/10))){
+					numArr[4] = new Number(800,300,newTime.getSeconds()<10?0:parseInt(newTime.getSeconds()/10));
+					numArr[4].Init();
+				}
+				if(sec%10!=newTime.getSeconds()%10){
+					numArr[5] = new Number(900,300,newTime.getSeconds()%10);
+					numArr[5].Init();
+				}
+				sec = newTime.getSeconds();
+			}
+		},1000)
+		var r = parseInt(Math.random()*255);
+		var g = parseInt(Math.random()*255);
+		var b = parseInt(Math.random()*255);
+		var a = 1;
+		var raduis = 10;
+		animate();
+		function animate(){
+			cxt.fillStyle = '#000';
+			cxt.clearRect(0,0,can.width,can.height);
+			cxt.beginPath();
+			cxt.fillStyle = 'rgba('+r+','+g+','+b+','+a+')';
+			cxt.arc(553,400,raduis,0,Math.PI*2,false);
+			cxt.closePath();
+			cxt.fill();
+			cxt.beginPath();
+			cxt.arc(553,350,raduis,0,Math.PI*2,false);
+			cxt.closePath();
+			cxt.fill();
+			cxt.beginPath();
+			cxt.arc(803,400,raduis,0,Math.PI*2,false);
+			cxt.closePath();
+			cxt.fill();
+			cxt.beginPath();
+			cxt.arc(803,350,raduis,0,Math.PI*2,false);
+			cxt.closePath();
+			cxt.fill();
+			for(var i=0;i<numArr.length;i++){
+				for(var j=0;j<numArr[i].ballArr.length;j++){
+					cxt.beginPath();
+					numArr[i].ballArr[j].Draw();
+				}
+			}
+			requestAnimationFrame(animate);
+		}
+		document.onmousemove = function(ev){
+			var ev = ev || window.event;
+			var x = ev.offsetX;
+			var y = ev.offsetY;
+			var ball = new CreateBall(x,y);
+			ball.Init();
+			ball.Draw();
+			ball.Boom();
+		}
+		/*can.onmousedown = function(ev){
+			var ev = ev || window.event;
+			var x = ev.offsetX;
+			var y = ev.offsetY;
+			var ball = new CreateBall(x,y);
+			ball.Init();
+			ball.Draw();
+			ball.Boom();
+			can.onmousemove = function(ev){
+				var ev = ev || window.event;
+				var x = ev.offsetX;
+				var y = ev.offsetY;
+				var ball = new CreateBall(x,y);
+				ball.Init();
+				ball.Draw();
+				ball.Boom();
+			}
+			can.onmouseup = function(){
+				can.onmousemove = null;
+				can.onmouseup = null;
+			}
+		}*/
+	</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数据流2</title>
+	<style>
+		html,body{
+			width: 100%;
+			height: 100%;
+		}
+		body,div,canvas{
+			margin: 0;
+			padding: 0;
+		}
+		#can{
+			display: block;
+			background: #000;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="can">你的浏览器不支持canvas，请更换或者升级浏览器</canvas>
+	<script>
+		//定义播放文字
+		var words = [];
+		words[0] = '老婆真好看 老婆真好看 老婆真好看 老婆真好看';
+		words[1] = '老婆我想你了 老婆我想你了 老婆我想你了 老婆我想你了';
+		words[2] = '老婆快出来 老婆快出来 老婆快出来 老婆快出来';
+		words[3] = '老婆我以后不敢了 老婆我以后不敢了 老婆我以后不敢了';
+		words[4] = '老婆你别生气 老婆你别生气 老婆你别生气 老婆你别生气';
+		words[5] = '好喜欢老婆 好喜欢老婆 好喜欢老婆';
+		words[6] = '老婆你在想我吗 老婆你在想我吗 老婆你在想我吗';
+		words[7] = '邓芊是杨桐的老婆 老婆我爱你';
+		words[8] = '永远都爱邓芊 不能让她难过';
+
+		//开始canvas绘制
+		var can = document.getElementById('can');
+		var cxt = can.getContext('2d');
+		var ww = can.width = window.innerWidth;
+		var wh = can.height = window.innerHeight;
+		var owords = [];
+		window.onresize =function(){
+			ww = can.width = window.innerWidth;
+			wh = can.height = window.innerHeight;
+		}
+		function Word(){};
+		Word.prototype = {
+			init:function(){
+				this.y = random(0,wh);
+				this.x = ww;
+				this.word = words[random(0,8)];
+				this.len = parseInt(cxt.measureText(this.word).width);
+				this.r = random(0,255);
+				this.g = random(0,255);
+				this.b = random(0,255);
+			},
+			draw:function(){
+				cxt.beginPath();
+				cxt.fillStyle='rgb('+this.r+','+this.g+','+this.b+')';
+				cxt.font = '24px Microsoft yahei';
+				cxt.textBaseline = 'hanging';
+				cxt.fillText(this.word,this.x,this.y);
+				this.update();
+			},
+			update:function(){
+				if(this.x<-this.len){
+					this.init();
+				}else{
+					this.x -=5; 
+				}
+			}
+		}
+		for(var i=0;i<10;i++){
+			var timer = setTimeout(function(){
+				var oword = new Word();
+				oword.init();
+				owords.push(oword);
+			},i*500);
+		}
+		//console.log(word1.x+' '+word1.y+' '+word1.word+' '+ww+' '+wh);
+		doit();
+		function doit(){
+			cxt.fillStyle = "rgba(0,0,0,1)";
+			cxt.fillRect(0,0,ww,wh);
+			for(var i=0;i<owords.length;i++){
+				owords[i].draw();
+			}
+			//console.log(word1.x+' '+word1.y );
+			requestAnimationFrame(doit);
+		}
+		function random(min,max){
+			var random = parseInt(Math.random()*(max-min)+min);
+			return random;
+		}
+	</script>
+</body>
+</html>

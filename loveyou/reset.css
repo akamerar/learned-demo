@@ -1,0 +1,112 @@
+﻿/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+input,select,textarea{ vertical-align:middle;}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, caption, tbody, tfoot, thead,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*自定义样式*/
+body {
+	font-size:12px;
+	color:#575757;
+	font-family:"微软雅黑";
+}
+
+a {
+	color:#575757;
+	text-decoration:none;
+}
+
+input,button{
+	border:none;
+	outline:none;
+}
+
+.clear {
+	clear:both;
+}
+
+.clearfix {
+	*zoom:1;
+}
+
+.clearfix:after {
+	content:"\20";
+	clear:both;
+	display:block;	
+}
+@font-face {
+  font-family: 'iconfont';
+  src: url('./font/iconfont.eot');
+  src: url('./font/iconfont.eot?#iefix') format('embedded-opentype'),
+  url('./font/iconfont.woff') format('woff'),
+  url('./font/iconfont.ttf') format('truetype'),
+  url('./font/iconfont.svg#iconfont') format('svg');
+}
+
+
+.iconfont{
+  font-family:"iconfont" !important;
+  font-size:16px;font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+@media screen and (min-width: 320px) {html{font-size:266.67%;}}
+@media screen and (min-width: 360px) {html{font-size:300.00%;}}
+@media screen and (min-width: 375px) {html{font-size:312.50%;}}
+@media screen and (min-width: 400px) {html{font-size:333.33%;}}
+@media screen and (min-width: 414px) {html{font-size:345.00%;}}
+@media screen and (min-width: 440px) {html{font-size:366.67%;}}
+@media screen and (min-width: 480px) {html{font-size:400.00%;}}
+@media screen and (min-width: 520px) {html{font-size:433.33%;}}
+@media screen and (min-width: 560px) {html{font-size:466.67%;}}
+@media screen and (min-width: 600px) {html{font-size:500.00%;}}
+@media screen and (min-width: 640px) {html{font-size:533.33%;}}
+@media screen and (min-width: 680px) {html{font-size:566.67%;}}
+@media screen and (min-width: 720px) {html{font-size:600.00%;}}
+@media screen and (min-width: 750px) {html{font-size:625.00%;}}
+@media screen and (min-width: 800px) {html{font-size:666.67%;}}
+@media screen and (min-width: 960px) {html{font-size:800.00%;}}

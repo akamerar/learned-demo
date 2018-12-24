@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>拖动排序</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="jquery-3.2.1.min.js"></script>
+	<style>
+		body,div,p,img,a,ul,li{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			width: 100%;
+		}
+		ul{
+			list-style: none;
+			border:2px solid #666;
+			padding: 3px 5px;
+			border-radius: 5px;
+		}
+		#box{
+			width: 80px;
+			margin: 100px auto;
+		}
+		#box ul li{
+			width: 90%;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			background: -webkit-linear-gradient(#666,#000);
+			background: -moz-linear-gradient(#666,#000);
+			background: -o-linear-gradient(#666,#000);
+			color: #fff;
+			border-radius: 5px;
+			margin: 3px auto;
+			border: 2px solid #000;
+			transition: all .5s;
+			cursor: pointer;
+		}
+		#box ul li:hover{
+			background: -webkit-linear-gradient(#666,#222);
+			background: -moz-linear-gradient(#666,#222);
+			background: -o-linear-gradient(#666,#222);
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li draggable='true'>推荐</li>
+			<li draggable='true'>鬼畜</li>
+			<li draggable='true'>游戏</li>
+			<li draggable='true'>娱乐</li>
+			<li draggable='true'>音乐</li>
+			<li draggable='true'>舞蹈</li>
+			<li draggable='true'>番剧</li>
+		</ul>
+	</div>
+	<script>
+		var dragIndex = 0;
+		var targetIndex = 0;
+		var $li = $('#box ul li');
+		var width = $li.eq(0).width();
+		$li.on('dragstart',function(ev){
+			$li = $('#box ul li');
+			dragIndex = $(this).index();
+			$(this).css('opacity','0.3');
+		});
+		$li.on('dragend',function(){
+			$(this).css('opacity','1');
+		});
+		$li.on('dragenter',function(){
+			if($(this).index()!=dragIndex){
+				$(this).css('width',width+30);
+			}
+		})
+		$li.on('dragleave',function(){
+			$(this).css('width',width);
+		})
+		$li.on('dragover',function(ev){
+			var ev = ev || window.event;
+			ev.preventDefault();
+		})
+		$li.on('drop',function(){
+			targetIndex = $(this).index();
+			var $obj = $li.eq(dragIndex);
+			$(this).css('width',width);
+			if(targetIndex>=dragIndex){
+				$(this).after($obj);
+			}else {
+				$(this).before($obj);
+			}
+		});
+	</script>
+</body>
+</html>

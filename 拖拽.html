@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="stylesheet" href="reset.css">
+	<style>
+		#box{
+			position: absolute;
+			width: 750px;
+			height: 500px;
+			background:url('plane.jpg') no-repeat;
+			background-size: cover;
+			left: 0;
+			top: 0;
+		}
+		#box img{
+			display: block;
+			outline: none;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script src="class.js"></script>
+	<script>
+		var oBox = document.getElementById('box');
+		bind(oBox,'mousedown',function(ev){
+			ev = ev || window.event;
+			var obj = this;
+			//鼠标点击的位置
+			var mouseX = ev.clientX;
+			var mouseY = ev.clientY;
+			//元素初始left top 值
+			var elementX = this.offsetLeft;
+			var elementY = this.offsetTop;
+			document.onmousemove = function(ev){
+				ev = ev || window.event;
+				//计算鼠标移动差值
+				var _x = ev.clientX-mouseX;
+				var _y = ev.clientY-mouseY;
+				//设置当前元素位置
+				obj.style.left = elementX + _x + 'px';
+				obj.style.top = elementY + _y + 'px';
+			};
+			//停止移动事件
+			bind(document,'mouseup',function(){
+				this.onmousemove = null;
+			});
+		});
+	</script>
+</body>
+</html>

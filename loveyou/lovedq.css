@@ -1,0 +1,262 @@
+@import url(reset.css);
+body{
+	font-family: "微软雅黑";
+}
+.word{
+	position: fixed;
+}
+.wp{
+	width: 800px;
+	height: 800px;
+	margin: 100px auto;
+	position: relative;
+}
+.circle1{
+	width: 500px;
+	height: 500px;
+	border-radius: 50%;
+	background: #ff0044;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition: 2s ease-in;
+	animation: circle1ani 5s ease;
+}
+@keyframes circle1ani{
+	0% {
+		width: 5px;
+		height: 5px;
+		left: -200px;
+	}
+	50% {
+		width: 5px;
+		height: 5px;
+		top: 100px;
+		left: 0;
+	}
+	100%{
+		width: 500px;
+		height: 500px;
+		top: 0px;
+	}
+}
+.circle2{
+	width: 500px;
+	height: 500px;
+	border-radius: 50%;
+	background: #ff0044;
+	position: absolute;
+	left: 300px;
+	top: 0;
+	transition: 2s ease-in;
+	animation: circle2ani 5s ease;
+}
+@keyframes circle2ani{
+	0% {
+		width: 5px;
+		height: 5px;
+		left: 1000px;
+	}
+	50% {
+		width: 5px;
+		height: 5px;
+		top: 100px;
+		left: 800px;
+	}
+	100%{
+		width: 500px;
+		height: 500px;
+		left: 300px;
+		top: 0px;
+	}
+}
+
+.que{
+	width: 480px;
+    height: 480px;
+    background: #ff0044;
+    position: absolute;
+    transform: rotate(45deg);
+    border-radius: 10px;
+    left: 159px;
+    top: 172px;
+    transition: 2s ease;
+	animation: queani 5s ease;
+}
+@keyframes queani{
+	0% {
+		width: 0px;
+		height: 0px;
+	}
+	68%{
+		width: 0px;
+    	height: 0px;
+	}
+	100%{
+		width: 480px;
+    	height: 480px;
+	}
+}
+.wp h1{
+	width: 480px;
+	height: 48px;
+	font-size: 46px;
+    color: #fff;
+    position: relative;
+    left: 243px;
+    top: 236px;
+    transition: 2s ease;
+    overflow: hidden;
+    text-wrap: nowrap;
+    animation: queani 7s ease;
+}
+@keyframes h1{
+	0%{
+		width: 0px;
+	}
+	60%{
+		width: 0px;
+	}
+	100%{
+		width: 480px;
+	}
+	
+}
+.words{
+	color: #ff0044;
+	font-size: 30px;
+}
+.words p{
+	position: fixed;
+}
+.p1{
+	top: 150px;
+	left:50px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p1 ease-out 8s;
+}
+@keyframes p1{
+	0% {
+		left: -300px;
+	}
+	87.5% {
+		left: -300px;
+	}
+	100%{
+		left: 50px;
+	}
+}
+.p2{
+	top:350px;
+	left:50px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p2 ease-out 12s;
+}
+@keyframes p2{
+	0% {
+		left: -300px;
+	}
+	89.5% {
+		left: -300px;
+	}
+	100%{
+		left: 50px;
+	}
+}
+.p3{
+	top: 550px;
+	left:45px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p3 ease-out 14s;
+}
+
+@keyframes p3{
+	0% {
+		left: -400px;
+	}
+	91.5% {
+		left: -400px;
+	}
+	100%{
+		left: 45px;
+	}
+}
+.p4{
+	top: 150px;
+	right:100px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p4 ease-out 16s;
+}
+@keyframes p4{
+	0% {
+		right: -300px;
+	}
+	92.5% {
+		right: -300px;
+	}
+	100%{
+		right: 100px;
+	}
+}
+.p5{
+	top: 350px;
+	right:200px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p5 ease-out 18s;
+}
+
+@keyframes p5{
+	0% {
+		right: -300px;
+	}
+	93.5% {
+		right: -300px;
+	}
+	100%{
+		right: 200px;
+	}
+}
+.p6{
+	top: 550px;
+	right:40px ;
+	text-wrap: nowrap;
+	text-overflow: clip;
+	animation: p6 ease-out 20s;
+}
+@keyframes p6{
+	0% {
+		right: -400px;
+	}
+	94.5% {
+		right: -400px;
+	}
+	100%{
+		right: 40px;
+	}
+}
+.p7{
+	color: #fff;
+    top: 420px;
+    left: 658px;
+    font-size: 60px;
+    z-index: 50;
+    animation: p7 linear 22s;
+}
+@keyframes p7{
+	0%{
+		transform: scale(0);
+	}
+	95%{
+		transform: scale(0);
+	}
+	100%{
+		transform: scale(1);
+	}
+}
+
+

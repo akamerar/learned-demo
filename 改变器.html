@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>改变器</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		html,body{
+			width: 100%;
+			height: 100%
+		}
+		.box{
+			margin: 25px;
+		}
+		.click{
+			display: inline-block;
+			border: 1px solid #000;
+			margin-left: 60px;
+			cursor: pointer;
+			cursor: hand;
+		}
+		.click:hover{
+			color: orange;
+			border-color: orange;
+		}
+		.set_box_mask{
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.2);
+		}
+		.set_box_mask .set_box{	
+			position: absolute;
+			width: 250px;
+			height: 150px;
+			background: #fff;
+			top:50%;
+			left: 50%;
+			margin-top: -75px;
+			margin-left: -100px;
+		}
+		.sm_box,.words{
+			float: left;
+			width: 50px;
+			height: 30px;
+			margin: 0 5px;
+			line-height: 30px;
+		}
+		.sm_box,.over{
+			cursor: pointer;
+			cursor: hand;
+		}
+		.p{
+			width: 100%;
+			margin: 5px 1px 15px;
+			overflow: hidden;
+		}
+		.over{
+			position: absolute;
+			width: 50px;
+			height: 20px;
+			bottom: 0;
+			left: 50%;
+			margin-left: -25px;
+			text-align: center;
+			background: #666;
+			color: #fff;
+		}
+		.size:hover{
+			color: orange;
+		}
+		.over:hover{
+			background: orange;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="box" style="width:100px;height: 100px;background-color: red;"></div>
+	<div class="click">click</div>
+	<div class="set_box_mask" style="display: none">
+		<div class="set_box">
+			<div class="p">
+				<p class="words">背景:</p>
+				<div class="sm_box red" style="background-color: red"></div>
+				<div class="sm_box green" style="background-color: green"></div>
+				<div class="sm_box blue" style="background-color: blue"></div>
+			</div>
+			<div class="p">
+				<p class="words">宽度:</p>
+				<div class="sm_box wd size">100px</div>
+				<div class="sm_box wd size">200px</div>
+				<div class="sm_box wd size">300px</div>
+			</div>
+			<div class="p">
+				<p class="words">高度:</p>
+				<div class="sm_box ht size">100px</div>
+				<div class="sm_box ht size">200px</div>
+				<div class="sm_box ht size">300px</div>
+			</div>
+			<div class="over">完成</div>
+		</div>
+	</div>
+	<script>
+		var oBox = document.getElementsByClassName("box")[0];
+		var oClick = document.getElementsByClassName("click")[0];
+		var oRed = document.getElementsByClassName("red")[0];
+		var oGreen = document.getElementsByClassName("green")[0];
+		var oBlue = document.getElementsByClassName("blue")[0];
+		var oWd = document.getElementsByClassName("wd");
+		var oHt = document.getElementsByClassName("ht");
+		var oOver = document.getElementsByClassName("over")[0];
+		var oMask = document.getElementsByClassName("set_box_mask")[0];
+
+		oClick.onclick = function(){oMask.style.display = "block";};
+
+		function color () {
+			oBox.style.backgroundColor = this.style.backgroundColor;
+		}
+		oRed.onclick = color;
+		oGreen.onclick = color;
+		oBlue.onclick = color;
+
+		function wd (){
+			oBox.style.width = this.innerHTML;
+		};
+		function ht(){
+			oBox.style.height = this.innerHTML;
+		};
+
+		oWd[0].onclick = wd;
+		oWd[1].onclick = wd;
+		oWd[2].onclick = wd;
+
+		oHt[0].onclick = ht;
+		oHt[1].onclick = ht;
+		oHt[2].onclick = ht;
+
+		oOver.onclick = function(){oMask.style.display = "none";}
+	</script>
+</body>
+</html>

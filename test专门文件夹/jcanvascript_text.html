@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jcanvas</title>
+</head>
+<script src="./jCanvaScript.1.5.18.min.js"></script>
+<body>
+     <canvas height="500" width="500" id="can1" style="border:1px solid #ccc;"></canvas>
+</body>
+<script>
+    var img=new Image();  //创建图像对象
+    img.src="1.jpg";   //设置图像地址
+    img.onload=function(){  //加载图片（canvas绘制图像需要在图片加载结束后）
+    jc.start("can1");
+    jc.image(img,0,0);
+    jc.rect(50, 50, 24, 24, '#FF0000');
+    jc.image(img,140,140,48,48,50,50,24,24);  //将rect所选区域放大后绘制
+    jc.start("can1");}
+</script>
+</html>

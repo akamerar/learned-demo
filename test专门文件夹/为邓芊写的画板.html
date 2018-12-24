@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body,div,canvas,label,input{
+			margin: 0;
+			padding: 0;
+		}
+		#can{
+			display: block;
+			background: #fff;
+			margin: 0 auto;
+			border:1px solid #000;
+		}
+		.tool{
+			width: 500px;
+			margin: 0 auto 10px;
+		}
+		input[type='button']{
+			margin-left: 0px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="can" width="500" height="500"></canvas>
+	<div class="tool">
+		<label for="color">选择画笔颜色：</label><input type="color" id='color' name="color">
+		<label for="bold">选择画笔/橡皮粗细：
+			<input type="number" id="bold" name="bold" min="4" max="24" value="12">像素(4-24)
+		</label>
+	</div>
+	<div class="tool">
+		画板大小：<label for="small">小<input type="radio" name="size" id="small" checked>
+		<label for="large">大<input type="radio" name="size" id="large">
+		<input type="button" id='xp' name="xp" value="换为橡皮檫">
+		<input type="button" id='clear' name="clear" value="清空画板">
+	</div>
+	
+	<script>
+		var can = document.getElementById('can');
+		var cxt = can.getContext('2d');
+		cxt.beginPath();
+		cxt.fillStyle = '#fff';
+		cxt.rect(0,0,can.width,can.height);
+		cxt.fill();
+		cxt.closePath();
+		var oColor = document.getElementById('color');
+		var oBold = document.getElementById('bold');
+		var color ='#000';
+		var bold = 12;
+		cxt.cap = 'round';
+		var oSize = document.getElementsByName('size');
+		var oXp = document.getElementById('xp');
+		var oClear = document.getElementById('clear');
+		oColor.onchange = function(){
+			color = oColor.value;
+		}
+		oBold.onchange = function(){
+			bold = oBold.value;
+		}
+		for(var i=0;i<2;i++){
+			oSize[i].index = i;
+			oSize[i].onchange = function(){
+				if(this.checked){
+					if(this.index == 0){
+						can.width = 500;
+						can.height = 500;
+					}else {
+						can.width = 800;
+						can.height = 800;
+					}
+				}
+			}
+		}
+		oXp.onclick = function(){
+			if(this.value=='换成橡皮檫'){
+				color = '#fff';
+				this.value='换成画笔';
+			}else{
+				color = oColor.value;
+				this.value='换成橡皮檫';
+			}
+		}
+		oClear.onclick = function(){
+			cxt.clearRect(0,0,can.width,can.height);
+		}
+		can.onmousedown = function(ev){
+			var ev = ev || window.event;
+			cxt.lineWidth = bold;
+			cxt.strokeStyle = color;
+			canL = can.offsetLeft;
+			canT = can.offsetTop;
+			var x = ev.clientX-canL;
+			var y = ev.clientY;
+			cxt.beginPath();
+			cxt.moveTo(x,y);
+			cxt.lineTo(x,y);
+			cxt.stroke();
+			can.onmousemove = function(ev){
+				var ev = ev || window.event;
+				var x = ev.clientX-canL;
+				var y = ev.clientY;
+				cxt.lineTo(x,y);
+				cxt.stroke();
+			}
+			can.onmouseup = function(){
+				this.onmousemove = null;
+			}
+		}
+	</script>
+</body>
+</html>

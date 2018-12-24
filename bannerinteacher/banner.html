@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>banner</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<style>
+		html,body{
+			height: 100%;
+		}
+		#box{
+			width: 500px;
+			height: 360px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-left: -250px;
+			margin-top: -180px;
+			overflow: hidden;
+		}
+		ul{
+			width: 2500px;
+			overflow: hidden;
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 360px;
+		}
+		ul li{
+			position: absolute;
+			list-style: none;
+			left: 0;
+			top: 0;
+		}
+		ul li img{border: none;display: block}
+		.btn_left,.btn_right{
+			width: 30px;
+			height: 50px;
+			background-color: #666;
+			position: absolute;
+			top: 50%;
+			margin-top: -25px;
+			color: #ccc;
+			font-size: 24px;
+			line-height: 50px;
+			font-weight: bold;
+			text-align: center;
+			cursor: pointer;
+			opacity: 0.5;
+		}
+		.btn_left{
+			left: 0;
+		}
+		.btn_right{
+			right: 0;
+		}
+		.bottom{
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			margin-left: -40px;
+			background-color: rgba(144, 144, 144, 0.5);
+			border-radius: 5px;
+		}
+		.bottom span{
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			margin-right: 3px;
+			border-radius: 50%;
+			background-color: #fff;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li style="display: block;"><img src="img/1.jpg" alt=""></li>
+			<li  style="display: none;"><img src="img/2.jpg" alt=""></li>
+			<li  style="display: none;"><img src="img/3.jpg" alt=""></li>
+			<li  style="display: none;"><img src="img/4.jpg" alt=""></li>
+			<li  style="display: none;"><img src="img/5.jpg" alt=""></li>
+		</ul>
+		<div class="btn">
+			<div class="btn_left">&lt;</div>
+			<div class="btn_right">&gt;</div>
+		</div>
+		<div class="bottom">
+			<span style="background-color: #f60;margin-left: 3px"></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+	</div>
+	<script src="js/move.js"></script>
+	<script>
+		var oBox = document.getElementById('box');
+		var oLi = document.getElementsByTagName('li');
+		var oLbtn = document.getElementsByClassName('btn_left')[0];
+		var oRbtn = document.getElementsByClassName('btn_right')[0];
+		var oSpan = document.getElementsByTagName('span');
+		var oNow_page = 0;
+		var time = new Date();
+		var timer;
+		var autoplay = function(){
+			timer = setInterval(function(){
+				page(1);
+				time = new Date();
+			},5000)
+		};
+		autoplay();
+		oBox.onmouseenter = function(){
+			clearInterval(timer);
+		};
+		oBox.onmouseleave = function(){
+			autoplay();
+		};
+		oLbtn.onclick = function(){
+			page(0);
+			time = new Date();
+		}
+		oRbtn.onclick = function(){
+			page(1);
+			time = new Date();
+		}
+		function page(btn){
+			if(new Date()-time>500){
+				if(btn==0){
+					if(oNow_page!=0){
+						oLi[oNow_page-1].style.left = '-500px';
+						oLi[oNow_page-1].style.display = 'block'
+						oSpan[oNow_page].style.background = '#fff';
+						move(oLi[oNow_page],{'left':'500px'},500);
+						move(oLi[oNow_page-1],{'left':'0px'},500);
+						oSpan[oNow_page-1].style.background = '#f60';
+						oNow_page--;
+					}else{
+						var len = oLi.length;
+						oLi[len-1].style.left = '-500px';
+						oLi[len-1].style.display = 'block'
+						oSpan[oNow_page].style.background = '#fff';
+						move(oLi[oNow_page],{'left':'500px'},500);
+						move(oLi[len-1],{'left':'0px'},500);
+						oSpan[len-1].style.background = '#f60';
+						oNow_page=len-1;
+					}	
+				}
+				if(btn==1){
+					if(oNow_page!=oLi.length-1){
+						oLi[oNow_page+1].style.left = '500px';
+						oLi[oNow_page+1].style.display = 'block'
+						oSpan[oNow_page].style.background = '#fff';
+						move(oLi[oNow_page],{'left':'-500px'},500);
+						move(oLi[oNow_page+1],{'left':'0px'},500);
+						oSpan[oNow_page+1].style.background = '#f60';
+						oNow_page++;
+					}else{
+						oLi[0].style.left = '500px';
+						oLi[0].style.display = 'block'
+						oSpan[oNow_page].style.background = '#fff';
+						move(oLi[oNow_page],{'left':'-500px'},500);
+						move(oLi[0],{'left':'0px'},500);
+						oSpan[0].style.background = '#f60';
+						oNow_page=0;
+					}					
+				}
+			}		
+		}
+		for(var i =0;i<oSpan.length;i++){
+			oSpan[i].index = i;
+			oSpan[i].onclick = function(){
+				if(new Date()-time>500){
+					this.style.backgroundColor = '#f60';
+					oSpan[oNow_page].style.backgroundColor = '#fff';
+					if(this.index>oNow_page){
+						oLi[this.index].style.left = '500px';
+						move(oLi[oNow_page],{'left':'-500px'},500);
+					}else if(this.index<oNow_page){
+						oLi[this.index].style.left = '-500px';
+						move(oLi[oNow_page],{'left':'500px'},500);
+					}else{
+						return;
+					}
+					oLi[this.index].style.display = 'block';
+					oNow_page = this.index;
+					move(oLi[oNow_page],{'left':'0px'},500);
+					time = new Date();
+				}			
+			}
+		}
+	</script>
+</body>
+</html>

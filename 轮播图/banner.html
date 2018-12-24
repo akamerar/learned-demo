@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3d轮播图</title>
+	<link rel="stylesheet" href="./css/reset.css">
+	<script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
+	<style type="text/css">
+		/*banner style*/
+		/*btn style*/
+		.banner{
+			width: 989px;
+			height: 410px;
+			margin: 150px auto;
+			position: relative;
+		}
+		.banner .btn img{
+			position: absolute;
+			z-index: 16;
+		}
+		.banner .btn img.prev{
+			left: 20px;
+			top: 180px;
+		}
+		.banner .btn img.next{
+			right: 20px;
+			top: 180px;
+		}
+		/*img sytle*/
+		/*css模拟3d效果*/
+		.banner .img-wp li img{
+			border: none;
+		}
+		.banner .img-wp{
+		}
+		.banner .img-wp li{
+			position: absolute;
+		}
+		.banner .img-wp li img{
+			width: 100%;
+			height: 100%;
+		}
+		.banner .img-wp li.center{
+			width: 640px;
+			height: 270px;
+			top: 65px;
+			left: 175px;
+			z-index: 15;
+		}
+		.banner .img-wp li.aside{
+			z-index: 14;
+		}
+		.banner .img-wp li.con{
+			width: 0px;
+			height: 0px;
+			top: 163px;
+    		left: 279px;
+		}
+		.banner .img-wp li.aside{
+			width: 540px;
+			height: 230px;
+			top: 85px;
+		}
+		.banner .img-wp li.left{
+			left: 0;
+		}
+		.banner .img-wp li.right{
+			left: 450px;
+		}
+	</style>
+</head>
+<body>
+	<!--轮播区域开始-->
+	<div class="banner">
+		<!--按钮图片-->
+		<div class="btn">
+			<img class="prev" src="img/left.png" alt="上一张" width="45" height="45">
+			<img class="next" src="img/right.png" alt=下一张"" width="45" height="45">
+		</div>
+		<!--图片内容-->
+		<ul class="img-wp">
+			<!--
+				图片板块区分：
+				左右预备区域
+				中间显示区域
+				切换区域
+			-->
+			<!--中间显示区域-->
+			<li class="center"><img src="img/1.jpg" alt=""></li>
+			<!--左切换区域-->
+			<li class="left aside"><img src="img/2.jpg" alt=""></li>
+			<!--底部切换图片-->
+			<li class="con"><a href="#"><img src="img/3.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/4.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/5.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/6.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/7.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/8.jpg" alt=""></a></li>
+			<li class="con"><a href="#"><img src="img/9.jpg" alt=""></a></li>
+			<!--右切换区域-->
+			<li class="right aside"><img src="img/10.jpg" alt=""><a href=""></a></li>
+		</ul>
+	</div>
+	<!--轮播区域结束-->
+	<!--js-->
+	<script type="text/javascript">
+		/*创建序列号*/
+		var _index = 0;
+		var time = 0;/*创建时间变量*/
+		/*创建容器 存放轮播图属性样式/定位位置*/
+		var z = 0;
+		var arrWidth = [];
+		var arrHeight = [];
+		var arrTop = [];
+		var arrLeft = [];
+		var arrZindex = [];
+		var obj = $(".banner .img-wp li");
+		time = new Date();
+
+		$(".prev").click(function(){
+			if (new Date()-time>500) {//新点击时间减去上次结束时间
+				flash(0);
+			}
+			time = new Date();//点击结束记录时间
+		});
+		$(".next").click(function(){
+			if (new Date()-time>500) {
+				flash(1);
+			}
+			time = new Date();
+		});
+		/*简单封装轮播模块*/
+		function flash (btn){
+			/*第一步:获取所有图片的宽高以及位置 进行数据赋值到相应容器中*/
+			for(var i=0;i<obj.length;i++){
+				arrWidth[i] = obj.eq(i).css("width");
+				arrHeight[i] = obj.eq(i).css("height");
+				arrTop[i] = obj.eq(i).css("top");
+				arrLeft[i] = obj.eq(i).css("left");
+				arrZindex[i] = obj.eq(i).css("z-index");
+			}			
+			for(var i =0;i<obj.length;i++){
+				if(btn==0){
+					if(i==9){ //图片为最后张
+						z = 0;
+					}else{
+						z = i+1;//模拟上一张切换
+					}
+					obj.eq(i).css({"z-index":arrZindex[z]});
+					obj.eq(i).animate({"width":arrWidth[z],"height":arrHeight[z],"top":arrTop[z],"left":arrLeft[z]},500);				
+				}else if (btn==1){
+					if(i==0){ //图片为第一张
+						z = 9;
+					}else{
+						z = i-1;
+					}
+					obj.eq(i).css({"z-index":arrZindex[z]});
+					obj.eq(i).animate({"width":arrWidth[z],"height":arrHeight[z],"top":arrTop[z],"left":arrLeft[z]},500);
+				}
+			}
+		};
+	</script>
+</body>
+</html>

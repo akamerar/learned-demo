@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>banner</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<style>
+		.noselect {
+
+		-webkit-touch-callout: none; /* iOS Safari */
+
+		-webkit-user-select: none; /* Chrome/Safari/Opera */
+
+		-khtml-user-select: none; /* Konqueror */
+
+		-moz-user-select: none; /* Firefox */
+
+		-ms-user-select: none; /* Internet Explorer/Edge */
+
+		user-select: none; /* Non-prefixed version, currently
+
+		not supported by any browser */
+
+		}
+		html,body{
+			height: 100%;
+		}
+		#box{
+			width: 500px;
+			height: 360px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-left: -250px;
+			margin-top: -180px;
+			overflow: hidden;
+			z-index: 50;
+		}
+		ul.img-wp{
+			width: 1000%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 360px;
+			margin-left:-500px; 
+		}
+		ul.img-wp li{
+			float: left;
+			list-style: none;
+		}
+		ul.img-wp li img{border: none;display: block}
+		.btn{
+			display: none;
+			opacity: 0;
+		}
+		.btn_left,.btn_right{
+			width: 30px;
+			height: 50px;
+			background-color: #666;
+			position: absolute;
+			top: 50%;
+			margin-top: -25px;
+			color: #ccc;
+			font-size: 24px;
+			line-height: 50px;
+			font-weight: bold;
+			text-align: center;
+			cursor: pointer;
+			opacity: 0.5;
+		}
+		.btn_left{
+			left: 0;
+		}
+		.btn_right{
+			right: 0;
+		}
+		ul.bottom{
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			margin-left: -35px;
+			background-color: rgba(144, 144, 144, 0.5);
+			border-radius: 5px;
+		}
+		ul.bottom li{
+			float: left;
+			width: 10px;
+			height: 10px;
+			margin-right: 4px;
+			border-radius: 50%;
+			background-color: #fff;
+			cursor: pointer;
+		}
+		ul.bottom li.sel{
+			background-color: #f60;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul class="img-wp">
+			<li><img src="img/5.jpg" alt=""></li>
+			<li><img src="img/1.jpg" alt=""></li>
+			<li><img src="img/2.jpg" alt=""></li>
+			<li><img src="img/3.jpg" alt=""></li>
+			<li><img src="img/4.jpg" alt=""></li>
+			<li><img src="img/5.jpg" alt=""></li>
+			<li><img src="img/1.jpg" alt=""></li>
+		</ul>
+		<div class="btn">
+			<div class="btn_left noselect" unselectable="on">&lt;</div>
+			<div class="btn_right noselect" unselectable="on">&gt;</div>
+		</div>
+		<ul class="bottom">
+			<li class="sel" style="margin-left: 4px;"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<script src="js/move.js"></script>
+	<script>
+		var oBox = document.getElementById('box');
+		var oUlimg = document.getElementsByClassName('img-wp')[0];
+		var oLibom = document.getElementsByClassName('bottom')[0].getElementsByTagName('li');
+		var oBtn = document.getElementsByClassName('btn')[0];
+		var oLeft = document.getElementsByClassName('btn_left')[0];
+		var oRight = document.getElementsByClassName('btn_right')[0];
+		var nowpage = 0;
+		var timer = 0;//控制计时器暂停继续
+		var time = new Date();//控制最短点击时间
+		//bottom选项卡切换
+		for(var i = 0 ;i <oLibom.length;i++){
+			oLibom[i].index = i;
+			oLibom[i].onclick = function(){
+				if(new Date()-time>500){
+					oLibom[nowpage].className = '';
+					nowpage = this.index;
+					change();
+				}	
+			};
+		};
+		//左右按钮切换
+		oLeft.onclick = function(){
+			if(new Date()-time>500){
+				oLibom[nowpage].className = '';
+				nowpage=nowpage<0?oLibom.length-1:nowpage-1;
+				change();
+			}	
+		};
+		oRight.onclick = function(){
+			if(new Date()-time>500){
+				oLibom[nowpage].className = '';
+				nowpage++;
+				nowpage %= oLibom.length+1;
+				change();		
+			}		
+		};
+		function change(){
+			time=new Date();
+			var bottompage = nowpage;
+			if(nowpage==oLibom.length){
+				bottompage = 0;
+			}else if(nowpage==-1){
+				bottompage = oLibom.length-1;
+			}
+			oLibom[bottompage].className = 'sel';	
+			move(oUlimg,{'left':-nowpage*500+'px'},500,function(){
+				if(nowpage==oLibom.length){
+					this.style.left = '0px';
+					nowpage=0;	
+				}else if(nowpage==-1){
+					this.style.left = -(oLibom.length-1)*500+'px';
+					nowpage=oLibom.length-1;
+				}
+			});						
+		};
+		//自动轮播
+		var autoPlay = function(){
+			timer = setInterval(function(){
+				oLibom[nowpage].className = '';
+				nowpage++;
+				nowpage %= oLibom.length+1;
+				change();	
+			},3000);
+		};
+		autoPlay();
+		//暂停 继续轮播
+		oBox.onmouseenter = function(){
+			clearInterval(timer);
+			oBtn.style.display = 'block';
+			move(oBtn,{opacity:'1'},100);
+		};
+		oBox.onmouseleave = function(){
+			autoPlay();
+			move(oBtn,{opacity:'0'},100,function(){
+				this.style.display = 'none';
+			});
+		};
+	</script>
+</body>
+</html>
