@@ -1,0 +1,344 @@
+html,body{
+    width: 100%;
+    /* min-width: 1080px; */
+    height: 100%;
+}
+body{
+    position: relative;
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    /* transition: top 0.5 s; */
+}
+
+#app{
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #eee;
+}
+
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: .2;
+}
+
+/* side-bar 部分 */
+/* .side-bar{
+    position: fixed;
+    width: 0.195312rem;
+    right: 0.039062rem;
+    top: 0;
+    z-index: 100
+}
+.side-bar ul li{
+    width: 0.0625rem;
+    height: 0.0625rem;
+    border-radius: 50%;
+    margin: 0.117188rem auto;
+    background-color: #fff;
+    transition: all 1s;
+}
+.side-bar ul li.sel{
+    background-color: #888;
+    width: 0.195312rem;
+    height: 0.195312rem;
+} */
+
+/*header部分*/
+#header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px 0 #666;
+    -o-box-shadow: 0 2px 10px 0 #666;
+    -webkit-box-shadow: 0 2px 10px 0 #666;
+    -moz-box-shadow: 0 2px 10px 0 #666;
+    border-bottom: 1px solid #aaa;
+    z-index: 50;
+    background-color: rgba(255, 255, 255, .8);
+    z-index: 100
+}
+#header .h-wrap{
+    margin: 0 auto;
+    width: 60%;
+    min-width: 600px;
+    height: 50px;
+}
+#header .h-wrap .h-left{
+    float: left;
+    height: 100%;
+}
+#header .h-wrap .h-left img{
+    height: 100%;
+}
+#header .h-wrap .h-right{
+    float: right;
+}
+#header .h-wrap .h-right ul li{
+    float: left;
+}
+#header .h-wrap .h-right ul li a{
+    font-size: 14px;
+    padding: 0 20px;
+    color: #888;
+    line-height: 50px;
+    border-right: 1px solid #999;
+    transition: all .3s
+}
+#header .h-wrap .h-right ul li a:hover{
+    color: #222;
+}
+#header .h-wrap .h-right ul li:last-child a{
+    border-right: none;
+}
+
+
+/*bowuguan部分*/
+.bowuguan{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.bowuguan .b-mask{
+    background-image: url('../imgs/banner-bg.jpg');
+}
+.bowuguan .b-bg1,.bowuguan .b-bg2{
+    position: absolute;
+    filter: blur(2px);
+}
+.bowuguan .b-bg1{
+    left: 0px;
+    top: 30px;
+    width: 600px;
+    height: 600px;
+    background: url('../imgs/bowuguan-bg.png') no-repeat center;
+    opacity: .2
+}
+.bowuguan .b-bg2{
+    right: 0px;
+    bottom: 0px;
+    width: 500px;
+    height: 500px;
+    background: url('../imgs/bowuguan-bg2.png') no-repeat bottom center;
+    opacity: .2
+}
+.bowuguan .b-wrap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /*border: 1px solid red; */
+    padding-top: -350px;
+    text-align: center;
+}
+.bowuguan .b-wrap h2,.bowuguan .b-wrap p{
+    opacity: 1;
+    position: relative;
+}
+.bowuguan .b-wrap h2{
+    letter-spacing: 30px;
+    padding: 60px 0 10px;
+    font-size: 40px;
+    animation: flipInX 1.5s;
+    color: #333;
+    font-weight: bold;
+}
+.bowuguan .b-wrap p{
+    font-size: 18px;
+    margin: 20px 0 50px;
+    animation: fadeInLeft 1.5s;
+}
+
+.bowuguan .b-wrap .b-banner{
+    width: 80%;
+    height: 500px;
+    /* overflow: hidden; */
+    /* background-image: url('../imgs/1.jpg');
+    background-repeat: no-repeat;
+    background-position: top center; */
+    /* border-radius: 40%; */
+    /* z-index: 60 */
+}
+.bowuguan .b-wrap .b-banner img{
+    border-radius: 5%;
+}
+/* .bowuguan .b-wrap .b-banner:hover .btn{
+    opacity: .2;
+}
+        .b-wrap .b-banner .btn{
+                opacity: 0;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                position: absolute;
+                top: 50%;
+                margin-top: -30px;
+                background-color: #000;
+                text-align: center;
+                line-height: 60px;
+                color: #eee;
+                font-size: 28px;
+                cursor: pointer;
+                transition: all 1s;
+        }
+        .b-wrap .b-banner .btn-left{
+            left: 0px;
+            z-index: 50
+        }
+        .b-wrap .b-banner .btn-right{
+            right: 0px;
+            z-index: 50
+        } */
+
+/*shaqi-info*/
+.shaqi-info{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.shaqi-info .s-mask{
+    background-image: url('../imgs/s-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center
+}
+.shaqi-info .s-i-wrap{
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 100%;
+}
+.s-i-wrap h2{
+    text-align: center;
+    width: 60%;
+    font-size: 40px;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 50px;
+    margin: 10px auto
+}
+.s-i-wrap p{
+    text-align: center;
+    width: 60%;
+    font-size: 15px;
+    text-indent: 30px;
+    margin:20px auto;
+    line-height: 20px;
+}
+.s-i-wrap p span.f60{
+    font-size: 20px;
+    color: #222;
+}
+.s-i-wrap video{
+    display: block;
+    width: 60%;
+    max-width: 900px;
+    margin: 50px auto;
+    background: #eee;
+    border-radius: 5%;
+}
+
+/*team-info*/
+.team-info{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.team-info .t-mask{
+    background-image: url('../imgs/t-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center
+}
+.team-info .t-i-wrap{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+}
+.team-info .t-i-wrap h2{
+    padding-top: 70px;
+    color: #444;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+}
+.team-info .t-i-wrap p{
+    text-align: center;
+    width: 60%;
+    line-height: 40px;
+    font-size: 15px;
+    text-indent: 40px;
+    margin: 10px auto;
+}
+.team-info .t-i-wrap .swiper-slide{
+    text-align: center;
+    margin: 0px auto;
+}
+.team-info .t-i-wrap .swiper-slide img{
+    border-radius: 5%;
+    width: 100%;
+}
+
+/*game*/
+.game-wrap{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.game{
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+.game-wrap .mask{
+   background-image: url('../imgs/banner-bg2.jpg')
+}
+#con{
+    position: relative;
+    width: 888px;
+    height: 448px;
+    margin: 0 auto;
+    border-radius: 0.078125rem;
+}
+#con, .pic{background-color: #1582B2}
+.pic{width: 0.3125rem;height: 0.3125rem;position: absolute;border: 0.015625rem solid #1582B2;cursor: pointer;}
+.game h2{
+    padding-top: 0.390625rem;
+}
+.game p{
+    font-size: 0.125rem;
+    margin: 0.390625rem 0;
+}
+.game .restart{
+    display: block;
+    background: #aaa;
+    border-radius: 0.039062rem;
+    width: 1.5625rem;
+    height: 0.390625rem;
+    color: #444;
+    font-weight: bold;
+    font-size: 0.15625rem;
+    text-align: center;
+    line-height: 0.390625rem;
+    margin: 10px auto 0;
+    transition: all .5s;
+}
+.game .restart:hover{
+    background: #f60;
+    color: #fff;
+}

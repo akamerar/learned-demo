@@ -1,0 +1,415 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	padding-top: 70px;
+	padding-left: 127px;
+	font-family: "微软雅黑";
+}
+
+ul,ol,dl,li{
+	list-style: none;
+}
+
+.clear{
+	clear: both;
+}
+
+a,i{
+	display: inline-block;
+	text-decoration: none;
+}
+
+/*初始化结束*/
+
+
+/*顶部样式*/
+.header{
+	width: 100%;
+	height: 70px;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);
+	overflow: hidden;
+	z-index: 50;
+}
+
+.header-left,.nar-bar-box,.icon,.icon-box{
+	float: left;
+}
+
+.header-right{
+	min-width: 527px;
+	background-color: white;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.icon{
+	width: 152px;
+	height: 48px;
+    margin: 12px 0 0 15px;
+}
+
+.nar-bar-box{
+	height: 100%;
+	margin-left: 80px;
+}
+
+.nar-bar>li{
+	display: inline-block;
+	margin-right: 100px;
+}
+
+.nar-bar>li.last{
+	margin-right: 0;
+}
+
+.nar-bar>li a{
+	width: 64px;
+	font-size: 16px;
+    color: #010101;
+    line-height: 70px;
+}
+
+.nar-bar>li a:hover{
+	color: skyblue;
+}
+
+.header-right,.app-icon,.gif-icon{
+	float: right;
+}
+
+.user-img{
+	width: 40px;
+	height: 40px;
+	border-radius:20px;
+	margin: 15px 45px 0 0;
+}
+.msg,.user,.app,.gif{
+	float: right;
+}
+
+.msg-icon{
+	float: right;
+	width: 15px;
+	right: 18px;
+	margin: 27px 59px 0 0;
+}
+
+.app-icon{
+	width: 12px;
+	right: 18px;
+	margin: 27px 42px 0 0;
+}
+
+.gif-icon{
+	width: 290px;
+	right: 70px;
+    margin-right: 24px;		
+}
+
+/*侧边栏样式*/
+
+.side-bar{
+	width: 127px;
+	height: 845px;
+	border-right: 1px solid #d9dfeb;
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding-top: 73px;
+	background: rgba(255,255,255,.8);
+}
+.learn-classify{
+	width: 100%;
+	border-bottom: 1px solid #d9dfeb;
+	margin-top: 5px;
+}
+
+.learn-classify>ul>a{
+	width: 107px;
+	height: 40px;
+	font-size: 12px;
+	line-height: 40px;
+	padding-left: 20px;
+    color: #444;
+}
+.learn-classify>ul>p{
+	width: 107px;
+	height: 40px;
+	font-size: 12px;
+	line-height: 40px;
+	text-align: center;
+    color: #d9dfeb;
+}
+
+.learn-classify>ul>a:hover{
+	background-color: skyblue;
+}
+
+.learn-classify>ul>a span,.learn-classify>ul>a>i{
+	float: left;
+}
+
+.learn-classify>ul>a>i{
+	width: 26px;
+	height: 26px;
+	margin-top: 10px;
+}
+
+/*主体部分*/
+.banner-wp{
+	width: 100%;
+	height:679px;
+	background: url(../img/newyear-bg.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+
+.banner-inner{
+	min-width: 1281px;
+	width: 1300px;
+	height: 579px;
+	padding-top: 100px;
+	margin: 0 auto ;
+}
+
+.banner{
+	width: 100%;
+	height:100%;
+	background-color: #333;
+}
+
+.palyer-left{
+	float: left;
+	width: 1012px;
+	height: 100%;
+	opacity: 0.5;
+}
+
+.palyer-right{
+	float: right;
+	width: 288px;
+	height: 100%;
+}
+
+iframe{
+	width: 100%;
+	height: 100%;
+}
+
+.palyer-right{
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.palyer-right a{
+	padding: 25px 25px 25px 50px;
+	color: #fff;
+	position: relative;
+}
+
+.palyer-right a:before{
+	width: 1px;
+	height: 28%;
+	content: "";
+	position: absolute;
+	left: 29px;
+	top: 0;
+	background-color: #fff;
+	z-index: 3;
+}
+
+.palyer-right a:after{
+	width: 1px;
+	height: 28%;
+	content: "";
+	position: absolute;
+	left: 29px;
+	bottom: 0;
+	background-color: #FFFFFF;
+	z-index: 3;
+}
+
+.palyer-right h5,.palyer-right h6{
+		font-size:16px;
+		font-weight: normal;
+		width: 205px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+}
+
+.time{
+	font-size: 14px;
+}
+
+.small-txt{
+	font-size: 12px;
+}
+
+.palyer-right h6{
+	color: lightskyblue;
+}
+
+.palyer-right h5{
+	margin-top: 12px;
+}
+
+.wave{
+	position: absolute;
+	left: 24px;
+    top: 21px;
+}
+
+.circle{
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border: 2px solid #fff;
+	border-radius: 50%;
+    left: 23px;
+    top: 43px;
+}
+
+.lesson-wp{
+	width: 100%;
+}
+
+.lesson-inner{
+	widows: 100%;
+	background-color: #f6f6f6;
+}
+
+.lesson-inner>div{
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.lesson-inner>div>h3,.lesson-inner>div>p{
+	text-align: center;
+}
+
+.lesson-inner>div>h3{
+	font: 22px 400;
+	padding-top: 45px;
+}
+
+.lesson-inner>div>p{
+	font-size: 16px;
+	color: #666;
+	padding-top: 13px;
+}
+
+.lesson-inner>div{
+	padding-bottom: 60px;
+}
+
+.lesson-inner>div>ul{
+	width: 1000px;
+	height: 338px;
+	margin: 33px auto 0;
+	
+}
+
+.lesson-inner>div.gongkai{
+	padding-bottom: 0;
+}
+
+.lesson-inner>div.gongkai>ul{
+	height: 279px;
+	
+}
+
+.mianfei>ul>li{
+	float: left;
+}
+
+.mianfei>ul>li:hover{
+	transform: translateY(-5px);
+	transition: 0.2s;
+}
+
+.mianfei>ul>li>a{
+	width: 164px;
+	height: 167px;
+	background-color: #fff;
+	margin: 0 1px 2px 1px;
+	text-align: center;
+}
+
+.lesson-logo{
+	width: 74px;
+	height: 44px;
+	background-image: url(../img/index-l-emb.png);
+	margin: 25px auto 5px;
+}
+
+.lesson-info{
+	font-size: 12px;
+	color: #555a5f;
+}
+
+.lesson-time{
+	font-size: 12px;
+	color: #3c5da5;
+	padding-top: 12px;
+}
+
+.gongkai>ul>li{
+	width: 233px;
+	height: 279px;
+	background-color: #fff;
+	float: left;
+	margin-right: 20px;
+}
+
+.gongkai>ul>li.last-li{
+	margin-right: 0;
+}
+
+.gongkai>ul>li>img{
+	width: 233px;
+	height: 141px;
+	border-radius: 7px;
+}
+
+.gongkai>ul>li>div{
+	color: #444;
+	margin-left: 21px;
+	font-size: 12px;
+}
+
+.gongkai>ul>li .gongkai-info{
+	font-size: 14px;
+	padding-top: 60px;
+}
+
+.teacher{
+	padding:10px 0;
+}
+
+.red-text{
+	color:#ff7e00;
+	margin: 0 -3px 0 10px;
+}
+
+.more-lesson{
+	width: 189px;
+	height: 50px;
+	line-height: 50px;
+	font-size: 18px;
+	border-radius: 5px;
+	background-color: #495bb8;
+	margin: 60px auto 80px;
+}
+
+.more-lesson>a{
+	color: #fff;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
